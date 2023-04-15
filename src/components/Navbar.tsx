@@ -37,24 +37,24 @@ export default function Nav() {
       >
         <HStack spacing="0px">
           {header.map((h) => (
-            <Box
-              borderRadius="5px"
-              w="100px"
-              h="70px"
-              paddingY="20px"
-              bgColor={h.path === location.pathname ? "linkedin.900" : ""}
+            <Link
+              to={h.path}
+              style={{
+                color: "white",
+              }}
             >
-              <Link
-                to={h.path}
-                style={{
-                  color: "white",
-                }}
+              <Box
+                borderRadius="5px"
+                w="100px"
+                h="70px"
+                paddingY="20px"
+                bgColor={h.path === location.pathname ? "linkedin.900" : ""}
               >
                 <Text textAlign="center" fontWeight="bold">
                   {h.text}
                 </Text>
-              </Link>
-            </Box>
+              </Box>
+            </Link>
           ))}
         </HStack>
       </Flex>
