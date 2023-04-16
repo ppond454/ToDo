@@ -240,7 +240,7 @@ export default function Transection() {
             />
             <Button
               colorScheme="whatsapp"
-              isDisabled={+amount <= 0}
+              isDisabled={+amount <= 0 || +comm <= 0}
               onClick={submitData}
               isLoading={loading}
             >
