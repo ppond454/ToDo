@@ -44,11 +44,13 @@ type TResult = {
   id: string
   amount: number
   timestamp: number
+  comm: number
 }
 export default function Transection() {
   const [data, setData] = useState<TResult[]>([])
   const [amount, setAmount] = useState("")
   const [deleteAmount, setDeleteAmount] = useState("")
+  const [comm, setComm] = useState("")
 
   const [loading, setLoading] = useState(false)
 
@@ -58,7 +60,7 @@ export default function Transection() {
 
   const COLECTTION = "transection"
 
-  const header = ["รายการ", "เวลา", "จำนวนเงิน", ""]
+  const header = ["รายการ", "เวลา", "จำนวนเงิน", "ค่าธรรมเนียม", ""]
 
   useEffect(() => {
     getData()
@@ -88,14 +90,17 @@ export default function Transection() {
 
   const submitData = async () => {
     if (!amount || +amount == 0) return
+    if (!comm || +comm == 0) return
 
     const data = {
       amount,
       timestamp: Date.now(),
+      comm,
     }
     await setDoc(doc(db, COLECTTION, uuidv4()), data)
     await getData()
     setAmount("")
+    setComm("")
   }
 
   const deleteData = async () => {
@@ -112,10 +117,19 @@ export default function Transection() {
     )
   }
 
+  const calCommSummary = () => {
+    if (data.length <= 0) return "0.00"
+    return formatCurrency(
+      data.reduce((acc, b) => {
+        return acc + +b.comm
+      }, 0)
+    )
+  }
+
   const Loading = () => {
     return (
       <Tr>
-        <Td colSpan={4} textAlign="center">
+        <Td colSpan={5} textAlign="center">
           <Spinner />
         </Td>
       </Tr>
@@ -134,6 +148,8 @@ export default function Transection() {
             </Box>
           </Td>
           <Td textAlign="right">{formatCurrency(+v.amount)}</Td>
+          <Td textAlign="right">{formatCurrency(+v.comm)}</Td>
+
           <Td>
             <Button
               colorScheme="red"
@@ -150,7 +166,7 @@ export default function Transection() {
       ))
     ) : (
       <Tr>
-        <Td colSpan={4} textAlign="center">
+        <Td colSpan={5} textAlign="center">
           ไม่พบข้อมูล
         </Td>
       </Tr>
@@ -159,7 +175,7 @@ export default function Transection() {
 
   return (
     <>
-      <Box width={500}>
+      <Box width={700}>
         <Flex>
           <Input
             placeholder="โปรดเลือกวันและเวลา"
@@ -172,6 +188,7 @@ export default function Transection() {
               setStart(e.currentTarget.value)
             }}
           />
+
           <Input
             placeholder="โปรดเลือกวันและเวลา"
             size="md"
@@ -185,34 +202,53 @@ export default function Transection() {
             }}
           />
         </Flex>
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            color="gray.300"
-            fontSize="1.2em"
-            children="฿"
-          />
-          <Input
-            placeholder="จำนวนเงิน"
-            type="number"
-            onChange={(e) => {
-              setAmount(e.currentTarget.value)
-            }}
-            onKeyPress={(e) => {
-              if (e.key !== "Enter") return
-              submitData()
-            }}
-            value={amount}
-          />
-          <Button
-            colorScheme="whatsapp"
-            isDisabled={+amount <= 0}
-            onClick={submitData}
-            isLoading={loading}
-          >
-            บันทึก
-          </Button>
-        </InputGroup>
+        <Flex>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              color="gray.300"
+              fontSize="1.2em"
+              children="฿"
+            />
+            <Input
+              placeholder="จำนวนเงิน"
+              type="number"
+              onChange={(e) => {
+                setAmount(e.currentTarget.value)
+              }}
+              value={amount}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              color="gray.300"
+              fontSize="1.2em"
+              children="฿"
+            />
+            <Input
+              placeholder="ค่าธรรมเนียม"
+              type="number"
+              onChange={(e) => {
+                setComm(e.currentTarget.value)
+              }}
+              onKeyPress={(e) => {
+                if (e.key !== "Enter") return
+                submitData()
+              }}
+              value={comm}
+            />
+            <Button
+              colorScheme="whatsapp"
+              isDisabled={+amount <= 0}
+              onClick={submitData}
+              isLoading={loading}
+            >
+              บันทึก
+            </Button>
+          </InputGroup>
+        </Flex>
+
         <TableContainer
           margin="auto"
           boxShadow="2xl"
@@ -253,6 +289,9 @@ export default function Transection() {
                 </Td>
                 <Td colSpan={1} textAlign="right">
                   {calSummary()}
+                </Td>
+                <Td colSpan={1} textAlign="right">
+                  {calCommSummary()}
                 </Td>
                 <Td></Td>
               </Tr>
