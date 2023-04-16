@@ -324,6 +324,7 @@ export default function Breverage() {
               bottom="0"
               bg="telegram.900"
               color="white"
+              fontWeight="bold"
             >
               <Tr h={20}>
                 <Td colSpan={5} textAlign="center">
