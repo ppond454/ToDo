@@ -66,7 +66,7 @@ export default function Breverage() {
   const [start, setStart] = useState(now())
   const [end, setEnd] = useState(now())
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [quantity, setQuantity] = useState<number>()
+  const [quantity, setQuantity] = useState<string>()
   const [menu, setMenu] = useState<{ label: string; value: string } | null>(
     null
   )
@@ -271,7 +271,7 @@ export default function Breverage() {
                 min={1}
                 max={100}
                 value={quantity}
-                onChange={(n) => setQuantity(+n)}
+                onChange={(n) => setQuantity(n)}
               >
                 <NumberInputField placeholder="จำนวน" />
                 <NumberInputStepper>
