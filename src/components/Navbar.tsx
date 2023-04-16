@@ -36,8 +36,9 @@ export default function Nav() {
         color="white"
       >
         <HStack spacing="0px">
-          {header.map((h) => (
+          {header.map((h, i) => (
             <Link
+              key={i}
               to={h.path}
               style={{
                 color: "white",
