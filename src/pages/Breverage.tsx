@@ -66,7 +66,7 @@ export default function Breverage() {
   const [start, setStart] = useState(now())
   const [end, setEnd] = useState(now())
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [quantity, setQuantity] = useState<number>(undefined)
+  const [quantity, setQuantity] = useState<number>()
   const [menu, setMenu] = useState<{ label: string; value: string } | null>(
     null
   )
