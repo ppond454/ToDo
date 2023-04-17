@@ -126,6 +126,28 @@ export default function Transection() {
     )
   }
 
+  function onChangeComm(e: React.ChangeEvent<HTMLInputElement>) {
+    setComm(e.currentTarget.value)
+  }
+
+  function onChangeAmount(e: React.ChangeEvent<HTMLInputElement>) {
+    const a = e.currentTarget.value
+    setAmount(e.currentTarget.value)
+
+    if (!a || +a === 0) {
+      return setComm("")
+    }
+    if (+a >= 1000) {
+      return setComm("30")
+    }
+    if (+a >= 500) {
+      return setComm("20")
+    }
+    if (+a >= 1) {
+      return setComm("10")
+    }
+  }
+
   const Loading = () => {
     return (
       <Tr>
@@ -213,9 +235,7 @@ export default function Transection() {
             <Input
               placeholder="จำนวนเงิน"
               type="number"
-              onChange={(e) => {
-                setAmount(e.currentTarget.value)
-              }}
+              onChange={onChangeAmount}
               value={amount}
             />
           </InputGroup>
@@ -229,9 +249,7 @@ export default function Transection() {
             <Input
               placeholder="ค่าธรรมเนียม"
               type="number"
-              onChange={(e) => {
-                setComm(e.currentTarget.value)
-              }}
+              onChange={onChangeComm}
               onKeyPress={(e) => {
                 if (e.key !== "Enter") return
                 submitData()
