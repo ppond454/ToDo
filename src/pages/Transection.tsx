@@ -137,6 +137,9 @@ export default function Transection() {
     if (!a || +a === 0) {
       return setComm("")
     }
+    if (+a >= 10000) {
+      return setComm("50")
+    }
     if (+a >= 1000) {
       return setComm("30")
     }
